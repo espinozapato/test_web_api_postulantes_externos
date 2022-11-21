@@ -12,14 +12,14 @@ import com.test_bolsa_santiago.test_bs.model.Indice;
 
 @Configuration
 public class IndiceImpl implements IndiceService {
-	private static final String url_instrumentos_validos = "https://startup.bolsadesantiago.com/api/consulta/TickerOnDemand/getIndices?access_token=";
+	private static final String url_indices = "https://startup.bolsadesantiago.com/api/consulta/TickerOnDemand/getIndices?access_token=insert_auth_token";
     private final RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
 	public List<Indice> getIndices() {
 		ResponseEntity<JsonObject> responseEntity =
 		          restTemplate.exchange(
-		        	url_instrumentos_validos,
+		        	url_indices,
 		            HttpMethod.POST,
 		            null,
 		            JsonObject.class
