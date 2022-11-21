@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolsa de Santiago | Gráficos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="row">
+		<div class="col-12">
+			<nav class="navbar navbar-expand-lg navbar-light bg-info">
+			  <a class="navbar-brand" href="#">Bolsa de Santiago</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			  <div class="collapse navbar-collapse justify-content-end d-flex" id="navbarNav">
+			    <ul class="navbar-nav">
+			      <li class="nav-item">
+			        <a class="nav-link" th:href="@{/}">Índices</a>
+			      </li>
+			      <li class="nav-item active">
+			        <a class="nav-link" th:href="graficos">Gráficos</a>
+			      </li>
+			      <li class="nav-item">
+			        <a class="nav-link" th:href="nemos">Nemotécnicos</a>
+			      </li>
+			    </ul>
+			  </div>
+			</nav>
+		</div>
+	</div>
+    <div class="container">
+    	<div class="row mt-3">
+    		<div class="col-12 justify-content-center d-flex">
+    			<h1>Gráficos Índices Bursátiles</h1>
+    		</div>
+    	</div>
+    	<div class="row my-5">
+    		<div class="col-12">
+    			<form>
+    				<div class="row">
+	    				<div class="col-12">
+	    					<canvas id="bar-chart" width="800" height="450"></canvas>
+	    				</div>
+    				</div>
+				</form>
+    		</div>
+    	</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+		function crearGrafico(keys, values){
+			new Chart(document.getElementById("bar-chart"), {
+			    type: 'bar',
+			    data: {
+			      labels: keys,
+			      datasets: [
+			        {
+			          label: "Valor",
+			          backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
+					  borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+					  borderWidth: 1,// Ancho del borde
+			          data: values
+			        }
+			      ]
+			    },
+			    options: {
+			      legend: { display: false },
+			      title: {
+			        display: true,
+			        text: 'Distribución Valores Índices Bursátiles'
+			      }
+			    }
+			});
+		}
+		$(document).ready(function () {
+			const nombres_indices = [];
+			const valores_indices = [];
+            $.ajax({
+                type: "get",
+                url: "/allIndices",
+                success: function (response) {
+                    $.each(response, function (index, values) { 
+                        nombres_indices.push(values.Nombre);
+                        valores_indices.push(values.Valor);
+                    });
+                    crearGrafico(nombres_indices, valores_indices);
+                }
+            });
+            
+        });
+	
+	</script>
+</body>
+</html>
